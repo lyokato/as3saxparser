@@ -1,4 +1,4 @@
-package org.coderepos.xml
+package org.coderepos.xml.sax
 {
     import flash.utils.ByteArray;
 
@@ -9,7 +9,7 @@ package org.coderepos.xml
 
         public function XMLSAXParser(config:XMLSAXParserConfig=null)
         {
-            if (congig == null)
+            if (config == null)
                 config = new XMLSAXParserConfig();
 
             _splitter       = new XMLFragmentSplitter(config);
