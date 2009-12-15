@@ -28,13 +28,18 @@ package suite
         public function testParse():void
         {
 
-            var xmlString:String = "<foo xmlns='http://example.org/' xmlns:bar='http://example.org/bar' hoge='buz'>data<bar:child>data2</bar:child><br /></foo>";
+            var xmlString:String = "<foo xmlns='http://example.org/' xmlns:bar='http://example.org/bar' hoge='buz'>data<bar:child>data2</bar:child>";
             var bytes:ByteArray = new ByteArray();
             bytes.writeUTFBytes(xmlString);
 
             var parser:XMLSAXParser = new XMLSAXParser();
             parser.handler = this;
             parser.pushBytes(bytes);
+
+            var xmlString2:String = "<br /></foo>";
+            var bytes2:ByteArray = new ByteArray();
+            bytes2.writeUTFBytes(xmlString2);
+            parser.pushBytes(bytes2);
         }
 
         public function startDocument():void {
