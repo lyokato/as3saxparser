@@ -1,1 +1,73 @@
 MIT License
+
+
+* Usage
+
+** prepare handler class
+
+At first, you have to prepare handler class.
+There are two ways for that.
+
+1. implements IXMLSAXHandler interface.
+2. extends XMLSAXDefaultHandler class.
+
+
+**  Implements IXMLSAXHandler interface.
+
+In this case, you should implements all functions IXMLSAXHandler interface indicates.
+
+-- MyHandler.as
+
+package {
+
+import org.coderepos.xml.sax.IXMLSAXHandler;
+import org.coderepos.xml.XMLAttributes;
+
+public class MyHandler implements IXMLSAXHandler {
+    ...
+    public function startDocument():void { ... }
+    public function endDocument():void { ... }
+    public function startElement(ns:String, name:String, attrs:XMLAttributes, depth:uint):void { ... }
+    public function endElement(ns:String, name:String, depth:uint):void { ... }
+    public function characters(str:String):void { ... }
+    public function comment(str:String):void { ... }
+    public function cdata(str:String):void { ... }
+}
+
+}
+
+** Extends XMLSAXDefaultHandler class.
+
+You only have to do is extending XMLSAXDefaultHandler, and override functions which you just need.
+It is easier than IXMLSAXHandler implementing, but in case that you want to extends another class,
+it is incovenient because AS3 doesn't support multiple inheritance.
+
+package {
+
+import org.coderepos.xml.sax.XMLSAXDefaultHandler;
+import org.coderepos.xml.XMLAttributes;
+
+public class MyHandler extends XMLSAXDefaultHandler {
+    ...
+    override protected function startElement(ns:String, name:String, attrs:XMLAttributes, depth:uint):void { ... }
+    override protected function endElement(ns:String, name:String, depth:uint):void { ... }
+    override protected function characters(str:String):void { ... }
+}
+
+}
+
+
+** If you completed to make your parser class, then, set it as XMLSAXParser's handler
+
+import org.coderepos.xml.sax.XMLSAXParser;
+
+var parser:XMLSAXParser = new XMLSAXParser();
+parser.handler = new MyHnadler();
+
+parser.pushBytes(xmlBytesFragment1);
+parser.pushBytes(xmlBytesFragment2);
+parser.pushBytes(xmlBytesFragment3);
+parser.pushBytes(xmlBytesFragment4);
+...
+
+
