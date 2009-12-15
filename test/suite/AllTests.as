@@ -10,7 +10,9 @@ package suite {
       // For examples, see: http://code.google.com/p/as3flexunitlib/wiki/Resources
       addTest(XMLUtilTest.suite());
       addTest(XMLFragmentSplitterTest.suite());
+      addTest(XMLElementNSTest.suite());
       addTest(XMLSAXInternalParserTest.suite());
+      addTest(XMLSAXInternalParserTest2.suite());
     }
     
   }

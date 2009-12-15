@@ -39,7 +39,7 @@ package org.coderepos.xml
             if (prefix == null)
                 return getURI();
 
-            else if (prefix in _dict[prefix]) {
+            else if (prefix in _dict) {
                 return _dict[prefix];
             } else {
                 if (_parent == null)

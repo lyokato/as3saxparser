@@ -5,6 +5,7 @@ package org.coderepos.xml.sax
     import org.coderepos.xml.XMLElementNS;
     import org.coderepos.xml.XMLAttributes;
     import org.coderepos.xml.exceptions.XMLSyntaxError;
+    import org.coderepos.xml.exceptions.XMLElementDepthOverError;
 
     public class XMLSAXInternalParser
     {
@@ -13,11 +14,14 @@ package org.coderepos.xml.sax
         private var _completedDecl:Boolean;
         private var _elementStack:Array;
 
+        private var _MAX_ELEMENT_DEPTH:int;
+
         public function XMLSAXInternalParser(config:XMLSAXParserConfig)
         {
             _completedDecl = false;
-            _elementStack  = [];
-            _currentNS     = new XMLElementNS("http://www.w3.org/XML/1998/namespace", null);
+            _elementStack = [];
+            _currentNS = new XMLElementNS("http://www.w3.org/XML/1998/namespace", null);
+            _MAX_ELEMENT_DEPTH = config.MAX_ELEMENT_DEPTH;
         }
 
         public function reset():void
@@ -27,7 +31,7 @@ package org.coderepos.xml.sax
             _currentNS     = new XMLElementNS("http://www.w3.org/XML/1998/namespace", null);
         }
 
-        private function get getHandler():IXMLSAXHandler
+        private function getHandler():IXMLSAXHandler
         {
             // null object pattern
             if (_handler == null)
@@ -52,10 +56,10 @@ package org.coderepos.xml.sax
                     if (ctx.getAt(1) == "?") {
                         parseDecl(ctx);
                         _completedDecl = true;
-                        getHandler.startDocument();
+                        getHandler().startDocument();
                     } else {
                         _completedDecl = true;
-                        getHandler.startDocument();
+                        getHandler().startDocument();
                         parseTag(ctx);
                     }
                 }
@@ -150,8 +154,8 @@ package org.coderepos.xml.sax
         private function xAttributeValue(ctx:XMLSAXInternalParserContext):String
         {
             var delim:String = ctx.get();
-            if (delim == "'" || delim == '"')
-                throw new XMLSyntaxError("Invalid tag: " + ctx.chunk);
+            if (delim != "'" && delim != '"')
+                throw new XMLSyntaxError("Invalid attribute value: " + ctx.chunk);
 
             var value:String = "";
             var ch:String = ctx.next();
@@ -181,12 +185,12 @@ package org.coderepos.xml.sax
                 var i:int = qname.indexOf(':');
                 if (i != -1) {
 
-                    if (i == 0 || i < qname.length - 2)
+                    if (i == 0 || i > qname.length - 2)
                         throw new XMLSyntaxError(
                             "Invalid attribute name: " + qname);
 
                     var prefix:String = qname.substring(0, i);
-                    var name:String   = qname.substring(i + 2);
+                    var name:String   = qname.substring(i + 1);
 
                     if (prefix == "xmlns")
                         namespaces[name] = value;
@@ -202,6 +206,7 @@ package org.coderepos.xml.sax
                 ch = ctx.get();
                 if ((ch != '>') && (ch != '/') && (ch != '?'))
                     xSpace(ctx);
+                ch = ctx.get();
             }
 
             _currentNS = new XMLElementNS(xmlns, _currentNS);
@@ -229,22 +234,26 @@ package org.coderepos.xml.sax
                 prefix    = null;
                 localName = qname;
             } else {
-                if (i == 0 || i < qname.length - 2)
+                if (i == 0 || i > qname.length - 2)
                     throw new XMLSyntaxError(
                         "Invalid element name: " + qname);
                 prefix    = qname.substring(0, i);
-                localName = qname.substring(i + 2);
+                localName = qname.substring(i + 1);
             }
 
             var ch:String = ctx.get();
             var uri:String = _currentNS.getURIForPrefix(prefix);
+
+            if (_elementStack.length > _MAX_ELEMENT_DEPTH)
+                throw new XMLElementDepthOverError("The Depth is over " + _MAX_ELEMENT_DEPTH);
+
             if (ch == "/") {
                 xToken(ctx, "/>");
-                getHandler.startElement(uri, localName, attrs, _elementStack.length);
-                getHandler.endElement(uri, localName, _elementStack.length);
+                getHandler().startElement(uri, localName, attrs, _elementStack.length);
+                getHandler().endElement(uri, localName, _elementStack.length);
                 _currentNS = _currentNS.getParent();
             } else {
-                getHandler.startElement(uri, localName, attrs, _elementStack.length);
+                getHandler().startElement(uri, localName, attrs, _elementStack.length);
                 _elementStack.push([prefix, localName]);
             }
 
@@ -267,11 +276,11 @@ package org.coderepos.xml.sax
                 prefix    = null;
                 localName = qname;
             } else {
-                if (i == 0 || i < qname.length - 2)
+                if (i == 0 || i > qname.length - 2)
                     throw new XMLSyntaxError(
                         "Invalid element name: " + qname);
                 prefix    = qname.substring(0, i);
-                localName = qname.substring(i + 2);
+                localName = qname.substring(i + 1);
             }
 
             var lastElem:Array   = _elementStack.pop();
@@ -279,10 +288,10 @@ package org.coderepos.xml.sax
                 throw new XMLSyntaxError("Unmatched closing tag: " + ctx.chunk);
 
             var uri:String = _currentNS.getURIForPrefix(prefix);
-            getHandler.endElement(uri, localName, _elementStack.length);
+            getHandler().endElement(uri, localName, _elementStack.length);
 
             if (_elementStack.length == 0) {
-                getHandler.endDocument();
+                getHandler().endDocument();
                 reset();
             }
             _currentNS = _currentNS.getParent();
@@ -296,7 +305,7 @@ package org.coderepos.xml.sax
 
             var content:String = StringUtil.trim(ctx.chunk);
             if (content.length > 0)
-                getHandler.characters(XMLUtil.unescapeXMLChar(content));
+                getHandler().characters(XMLUtil.unescapeXMLChar(content));
         }
 
         private function parseDecl(ctx:XMLSAXInternalParserContext):void
@@ -317,26 +326,26 @@ package org.coderepos.xml.sax
         private function parseCDATA(ctx:XMLSAXInternalParserContext):void
         {
             if (_elementStack.length == 0)
-                throw new XMLSyntaxError("Invalid tag: " + ctx.chunk);
+                throw new XMLSyntaxError("Invalid tag for CDATA: " + ctx.chunk);
 
             var res:Array = ctx.chunk.match(/^\<\!\[CDATA\[(.+)\]\]\>$/);
             if (res == null)
-                throw new XMLSyntaxError("Invalid tag: " + ctx.chunk);
+                throw new XMLSyntaxError("Invalid tag for CDATA: " + ctx.chunk);
 
             var cdata:String = StringUtil.trim(res[1]);
             if (cdata.length > 0)
-                getHandler.cdata(cdata);
+                getHandler().cdata(cdata);
         }
 
         private function parseComment(ctx:XMLSAXInternalParserContext):void
         {
             var res:Array = ctx.chunk.match(/^\<\!\-\-(.+)\-\-\>$/);
             if (res == null)
-                throw new XMLSyntaxError("Invalid tag: " + ctx.chunk);
+                throw new XMLSyntaxError("Invalid tag for comment: " + ctx.chunk);
 
             var comment:String = StringUtil.trim(res[1]);
             if (comment.length > 0)
-                getHandler.comment(comment);
+                getHandler().comment(comment);
         }
 
     }

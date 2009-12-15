@@ -21,7 +21,8 @@ package org.coderepos.xml
             _internalParser.handler = handler;
         }
 
-        // @throws XMLSyntaxError, XMLFragmentSizeOverError
+        // @throws XMLSyntaxError, XMLFragmentSizeOverError,
+        // XMLElementDepthOverError
         public function pushBytes(bytes:ByteArray):void
         {
             _splitter.pushBytes(bytes);
