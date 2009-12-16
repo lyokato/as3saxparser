@@ -45,7 +45,7 @@ package suite
 
         public function endDocument():void {
             _state += "endDocument:";
-            assertEquals("state check", "startDocument:element[http://www.w3.org/XML/1998/namespace:foo:0]:CHARS[data]:CDATA[hoge >]:COMMENT[foobarbuz]:element[http://www.w3.org/XML/1998/namespace:br:1]:endElement[http://www.w3.org/XML/1998/namespace:br:1]:endElement[http://www.w3.org/XML/1998/namespace:foo:0]:endDocument:", _state);
+            assertEquals("state check", "startDocument:element[null:foo:0]:CHARS[data]:CDATA[hoge >]:COMMENT[foobarbuz]:element[null:br:1]:endElement[null:br:1]:endElement[null:foo:0]:endDocument:", _state);
         }
         public function startElement(ns:String, name:String, attr:XMLAttributes, depth:uint):void {
             _state += "element[" + ns + ":" + name + ":" + String(depth) + "]:";

@@ -20,7 +20,8 @@ package org.coderepos.xml.sax
         {
             _completedDecl = false;
             _elementStack = [];
-            _currentNS = new XMLElementNS("http://www.w3.org/XML/1998/namespace", null);
+            _currentNS = new XMLElementNS(null, null);
+            _currentNS.addNamespace("xml", "http://www.w3.org/XML/1998/namespace");
             _MAX_ELEMENT_DEPTH = config.MAX_ELEMENT_DEPTH;
         }
 
@@ -28,7 +29,8 @@ package org.coderepos.xml.sax
         {
             _completedDecl = false;
             _elementStack  = [];
-            _currentNS     = new XMLElementNS("http://www.w3.org/XML/1998/namespace", null);
+            _currentNS = new XMLElementNS(null, null);
+            _currentNS.addNamespace("xml", "http://www.w3.org/XML/1998/namespace");
         }
 
         private function getHandler():IXMLSAXHandler
