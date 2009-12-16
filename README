@@ -71,3 +71,26 @@ parser.pushBytes(xmlBytesFragment4);
 ...
 
 
+** XMLAttributes
+
+on callback named 'startElement', arguments includes XMLAttributes object.
+
+startElement(ns:String, localName:String, attrs:XMLAttributes, depth:uint)
+
+
+<foo xmlns="http://example.org/" xmlns:bar="http://example.org/bar" hoge="aaa" bar:fuga="bbb">
+
+on this element,
+
+attrs.getValue("hoge"); returns "aaa"
+attrs.getValueWithPrefix("bar", "fuga"); returns "bbb"
+
+or you can iterates all attributes
+
+var attrsArray:Array = attrs.toArray();
+for each(attr:XMLAttribute in attrsArray) {
+    trace(attr.uri);   // namespace uri
+    trace(attr.name);  // attribute name
+    trace(attr.value); // attribute value
+}
+
