@@ -244,7 +244,7 @@ package org.coderepos.xml.sax
             var ch:String = ctx.get();
             var uri:String = _currentNS.getURIForPrefix(prefix);
 
-            if (_elementStack.length > _MAX_ELEMENT_DEPTH)
+            if (_elementStack.length >= _MAX_ELEMENT_DEPTH)
                 throw new XMLElementDepthOverError("The Depth is over " + _MAX_ELEMENT_DEPTH);
 
             if (ch == "/") {
