@@ -13,6 +13,7 @@ package suite {
       addTest(XMLElementNSTest.suite());
       addTest(XMLSAXInternalParserTest.suite());
       addTest(XMLSAXInternalParserTest2.suite());
+      addTest(XMLAttributesTest.suite());
       addTest(XMLSAXParserTest.suite());
     }
     

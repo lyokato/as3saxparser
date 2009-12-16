@@ -37,7 +37,7 @@ package org.coderepos.xml
             var uri:String = (prefix == null)
                 ? _ns.getURI() : _ns.getURIForPrefix(prefix);
             if (uri == null)
-                throw new XMLSyntaxError("Invalid prefix");
+                return null;
 
             if (!(uri in _attrs))
                 return null;
