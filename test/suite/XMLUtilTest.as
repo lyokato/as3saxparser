@@ -23,12 +23,11 @@ package suite
 
         public function testEscape():void
         {
-            var origin:String = "<foo>";
+            var origin:String = "<foo> 'bar' \"buz\"";
             var escaped:String = XMLUtil.escapeXMLChar(origin);
-            assertEquals(escaped, '&lt;foo&gt;');
+            assertEquals(escaped, '&lt;foo&gt; &apos;bar&apos; &quot;buz&quot;');
             var unescaped:String = XMLUtil.unescapeXMLChar(escaped);
-            assertEquals(unescaped, '<foo>');
+            assertEquals(unescaped, "<foo> 'bar' \"buz\"");
         }
-
     }
 }

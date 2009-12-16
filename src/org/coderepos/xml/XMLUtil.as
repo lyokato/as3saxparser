@@ -26,7 +26,7 @@ package org.coderepos.xml
 
         public static function escapeXMLChar(src:String):String
         {
-            return src.replace(/([\<\>\&\'])/g, function():String {
+            return src.replace(/([\<\>\&\'\"])/g, function():String {
                 var escaped:String;
                 switch (arguments[1]) {
                     case '<':
@@ -38,8 +38,11 @@ package org.coderepos.xml
                     case '&':
                         escaped = "&amp;"
                         break;
-                    case "'":
+                    case '"':
                         escaped = "&quot;"
+                        break;
+                    case "'":
+                        escaped = "&apos;"
                         break;
                 }
                 return escaped;
@@ -48,7 +51,7 @@ package org.coderepos.xml
 
         public static function unescapeXMLChar(src:String):String
         {
-            return src.replace(/\&(lt|gt|amp|quot)\;/g, function():String{
+            return src.replace(/\&(lt|gt|amp|quot|apos)\;/g, function():String{
                 var unescaped:String;
                 switch (arguments[1]) {
                     case "lt":
@@ -61,6 +64,9 @@ package org.coderepos.xml
                         unescaped = "&";
                         break;
                     case "quot":
+                        unescaped = '"';
+                        break;
+                    case "apos":
                         unescaped = "'";
                         break;
                 }
