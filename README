@@ -49,9 +49,9 @@ import org.coderepos.xml.XMLAttributes;
 
 public class MyHandler extends XMLSAXDefaultHandler {
     ...
-    override protected function startElement(ns:String, name:String, attrs:XMLAttributes, depth:uint):void { ... }
-    override protected function endElement(ns:String, name:String, depth:uint):void { ... }
-    override protected function characters(str:String):void { ... }
+    override public function startElement(ns:String, name:String, attrs:XMLAttributes, depth:uint):void { ... }
+    override public function endElement(ns:String, name:String, depth:uint):void { ... }
+    override public function characters(str:String):void { ... }
 }
 
 }

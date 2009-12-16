@@ -17,6 +17,7 @@ package suite {
       addTest(XMLSAXInternalParserTest2.suite());
       addTest(XMLAttributesTest.suite());
       addTest(XMLSAXParserTest.suite());
+      addTest(XMLSAXParserTest2.suite());
     }
     
   }
