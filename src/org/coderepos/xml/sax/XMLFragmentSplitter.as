@@ -38,6 +38,7 @@ package org.coderepos.xml.sax
             var first:int     = _buffer.readByte();
             var isTag:Boolean = (first == XMLUtil.TAG_START_CHARCODE);
 
+            var isComment:Boolean    = false;
             var isCDATA:Boolean      = false;
             var reachedToEnd:Boolean = false;
 
@@ -49,7 +50,15 @@ package org.coderepos.xml.sax
                 var ch:int = _buffer.readByte();
                 i++;
 
-                if (isTag && i == 9) {
+                if (i == 4 && isTag) {
+                    temp = _buffer.position;
+                    _buffer.position = startPos;
+                    if (_buffer.readUTFBytes(4) == "<!--")
+                        isComment = true;
+                    _buffer.position = temp;
+                }
+
+                if (i == 9 && isTag && !isComment) {
                     temp = _buffer.position;
                     _buffer.position = startPos;
                     if (_buffer.readUTFBytes(9) == "<![CDATA[")
@@ -63,11 +72,23 @@ package org.coderepos.xml.sax
                 }
 
                 if (isTag && ch == XMLUtil.TAG_END_CHARCODE) {
-                    if (isCDATA) {
+                    var last1:int;
+                    var last2:int;
+                    if (isComment) {
                         temp = _buffer.position;
                         _buffer.position = temp - 3;
-                        var last1:int = _buffer.readByte();
-                        var last2:int = _buffer.readByte();
+                        last1 = _buffer.readByte();
+                        last2 = _buffer.readByte();
+                        _buffer.position = temp;
+                        if (   last1 == XMLUtil.HYPHEN_CHARCODE
+                            && last2 == XMLUtil.HYPHEN_CHARCODE)
+                            reachedToEnd = true;
+                    }
+                    else if (isCDATA) {
+                        temp = _buffer.position;
+                        _buffer.position = temp - 3;
+                        last1 = _buffer.readByte();
+                        last2 = _buffer.readByte();
                         _buffer.position = temp;
                         if (   last1 == XMLUtil.RBRA_CHARCODE
                             && last2 == XMLUtil.RBRA_CHARCODE)

@@ -19,7 +19,7 @@ package suite
         {
             var ts:TestSuite = new TestSuite();
             ts.addTest( new XMLFragmentSplitterTest("testSplit") );
-            ts.addTest( new XMLFragmentSplitterTest("testSplitWithCDATA") );
+            ts.addTest( new XMLFragmentSplitterTest("testSplitWithCommentAndCDATA") );
             ts.addTest( new XMLFragmentSplitterTest("testDiscard") );
             return ts;
         }
@@ -69,7 +69,7 @@ package suite
             assertNull(res4);
         }
 
-        public function testSplitWithCDATA():void
+        public function testSplitWithCommentAndCDATA():void
         {
             var config:XMLSAXParserConfig = new XMLSAXParserConfig();
             config.MAX_FRAGMENT_SIZE = 1024 * 100;
@@ -77,7 +77,7 @@ package suite
             var splitter:XMLFragmentSplitter = new XMLFragmentSplitter(config);
 
             var bytes:ByteArray = new ByteArray();
-            bytes.writeUTFBytes("<foo>bar<![CDATA[ hogehoge > ]]></foo>");
+            bytes.writeUTFBytes("<foo>bar<![CDATA[ hogehoge > ]]><!-- hogehoge > --></foo>");
             splitter.pushBytes(bytes);
             var res1:String = splitter.splitFragment();
             assertEquals('first fragment should be <foo>', res1, '<foo>');
@@ -86,9 +86,11 @@ package suite
             var res3:String = splitter.splitFragment();
             assertEquals('third fragment should be <![CDATA[ hogehoge > ]]>', res3, '<![CDATA[ hogehoge > ]]>');
             var res4:String = splitter.splitFragment();
-            assertEquals('fourth fragment should be </foo>', res4, '</foo>');
+            assertEquals('fourth fragment should be <!-- hogehoge > -->', res4, '<!-- hogehoge > -->');
             var res5:String = splitter.splitFragment();
-            assertNull(res5);
+            assertEquals('fifth fragment should be </foo>', res5, '</foo>');
+            var res6:String = splitter.splitFragment();
+            assertNull(res6);
         }
     }
 }

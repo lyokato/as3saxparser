@@ -8,6 +8,8 @@ package org.coderepos.xml
         public static const TAG_END_CHARCODE:int = TAG_END.charCodeAt(0);
         public static const RBRA:String = "]";
         public static const RBRA_CHARCODE:int = RBRA.charCodeAt(0);
+        public static const HYPHEN:String = "-";
+        public static const HYPHEN_CHARCODE:int = HYPHEN.charCodeAt(0);
 
         public static function isNameStart(char:String):Boolean
         {
