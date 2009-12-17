@@ -15,6 +15,7 @@ package suite
         private var _calledAttrEvent:Boolean = false;
         private var _calledMessageEvent:Boolean = false;
         private var _calledPresenceEvent:Boolean = false;
+        private var _calledUnknownEvent:Boolean = false;
         private var _calledIQEvent:Boolean = false;
 
         public function XMLElementEventHandlerTest(meth:String)
@@ -36,6 +37,7 @@ package suite
             handler.registerElementEvent("jabber:client", "presence", 1, presenceEvent);
             handler.registerElementEvent("jabber:client", "message", 1, messageEvent);
             handler.registerElementEvent("jabber:client", "iq", 1, iqEvent);
+            handler.registerElementEvent("jabber:client", "unknown", 1, unknownEvent);
             return handler;
         }
 
@@ -45,6 +47,11 @@ package suite
             assertEquals("attr.getValue('from')", "wonderland.lit", attr.getValue("from"));
             assertEquals("attr.getValue('id')", "foobar", attr.getValue("id"));
             assertEquals("attr.getValue('version')", "1.0", attr.getValue("version"));
+        }
+
+        private function unknownEvent(elem:XMLElement):void
+        {
+            _calledUnknownEvent = true;
         }
 
         private function messageEvent(elem:XMLElement):void
@@ -101,11 +108,13 @@ package suite
             + "<iq type='result'><query xmlns='jabber:iq:roster'><item jid='alice@wonderland.lit'/><item jid='madhatter@wonderland.lit'/><item jid='whiterabbit@wonderland.lit'/></query></iq>"
             + "<message from='queen@wonderland.lit' to='madhatter@wonderland.lit'><body>Off with his head!</body></message>"
             + "<presence type='unavailable'/>"
+            + "<noevent />"
             + "</stream:stream>"));
             assertTrue(_calledAttrEvent);
             assertTrue(_calledMessageEvent);
             assertTrue(_calledPresenceEvent);
             assertTrue(_calledIQEvent);
+            assertFalse(_calledUnknownEvent);
         }
     }
 }

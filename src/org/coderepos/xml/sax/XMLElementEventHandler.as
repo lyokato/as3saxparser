@@ -56,9 +56,10 @@ package org.coderepos.xml.sax
 
             if (_currentBuffer == null) {
                 if (_events[depth] != null) {
-                    if (id in _events[depth])
+                    if (id in _events[depth]) {
                         _currentCallback = _events[depth][id];
-                        _currentBuffer = new XMLElementBuffer(ns, localName, attrs, depth);
+                        _currentBuffer   = new XMLElementBuffer(ns, localName, attrs, depth);
+                    }
                 }
             } else {
                 _currentBuffer.startCapturingDescendant(ns, localName, attrs, depth);
