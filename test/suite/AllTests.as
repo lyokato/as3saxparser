@@ -19,6 +19,7 @@ package suite {
       addTest(XMLSAXParserTest.suite());
       addTest(XMLSAXParserTest2.suite());
       addTest(XMLElementBufferTest.suite());
+      addTest(XMLElementEventHandlerTest.suite());
     }
     
   }
