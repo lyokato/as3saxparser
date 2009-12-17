@@ -18,6 +18,7 @@ package suite {
       addTest(XMLAttributesTest.suite());
       addTest(XMLSAXParserTest.suite());
       addTest(XMLSAXParserTest2.suite());
+      addTest(XMLElementBufferTest.suite());
     }
     
   }

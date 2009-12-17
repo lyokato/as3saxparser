@@ -26,6 +26,13 @@ package org.coderepos.xml
             return (char.match(/^\s$/) != null);
         }
 
+        public static function genElementSig(ns:String, localName:String):String
+        {
+            if (ns == null)
+                ns = "http://coderepos.org/ns/null";
+            return ns + "$" + localName;
+        }
+
         public static function escapeXMLChar(src:String):String
         {
             return src.replace(/([\<\>\&\'\"])/g, function():String {

@@ -36,6 +36,13 @@ package org.coderepos.xml
         {
             var uri:String = (prefix == null)
                 ? _ns.getURI() : _ns.getURIForPrefix(prefix);
+
+            return getValueWithURI(uri, attrName);
+        }
+
+        public function getValueWithURI(uri:String,
+            attrName:String):String
+        {
             if (uri == null)
                 return null;
 
