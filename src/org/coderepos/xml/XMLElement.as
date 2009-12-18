@@ -36,7 +36,7 @@ package org.coderepos.xml
         public function getElementsNS(ns:String, localName:String):Array
         {
             var id:String = XMLUtil.genElementSig(ns, localName);
-            return (id in _children) ? _children[id] : null;
+            return (id in _children) ? _children[id] : [];
         }
 
         public function getFirstElement(localName:String):XMLElement

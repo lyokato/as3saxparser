@@ -104,7 +104,7 @@ package suite
         {
             var parser:XMLSAXParser = new XMLSAXParser();
             parser.handler = genHandler();
-            parser.pushBytes(genBytesFromString("<stream:stream from='wonderland.lit' id='foobar' version='1.0' xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/stream'>"
+            parser.pushBytes(genBytesFromString("<?xml version='1.0' encoding='utf-8' ?><stream:stream from='wonderland.lit' id='foobar' version='1.0' xmlns='jabber:client' xmlns:stream='http://etherx.jabber.org/stream'>"
             + "<iq type='result'><query xmlns='jabber:iq:roster'><item jid='alice@wonderland.lit'/><item jid='madhatter@wonderland.lit'/><item jid='whiterabbit@wonderland.lit'/></query></iq>"
             + "<message from='queen@wonderland.lit' to='madhatter@wonderland.lit'><body>Off with his head!</body></message>"
             + "<presence type='unavailable'/>"

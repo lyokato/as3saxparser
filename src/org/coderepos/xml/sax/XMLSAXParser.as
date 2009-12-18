@@ -32,6 +32,11 @@ package org.coderepos.xml.sax
             }
             _splitter.discardRead();
         }
+
+        public function reset():void
+        {
+            _internalParser.reset();
+        }
     }
 }
 
