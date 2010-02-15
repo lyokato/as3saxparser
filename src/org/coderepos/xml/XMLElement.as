@@ -11,11 +11,11 @@ package org.coderepos.xml
         public function XMLElement(ns:String, localName:String,
             attrs:XMLAttributes, texts:Array, children:Object)
         {
-            _ns                 = ns;
-            _localName          = localName;
-            _attrs              = attrs;
-            _texts              = texts;
-            _children           = children;
+            _ns        = ns;
+            _localName = localName;
+            _attrs     = attrs;
+            _texts     = texts;
+            _children  = children;
         }
 
         public function match(ns:String, localName:String):Boolean

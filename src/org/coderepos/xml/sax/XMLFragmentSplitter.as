@@ -35,7 +35,7 @@ package org.coderepos.xml.sax
                 return null;
 
             var startPos:int  = _buffer.position;
-            var first:int     = _buffer.readByte();
+            var first:uint    = _buffer.readUnsignedByte();
             var isTag:Boolean = (first == XMLUtil.TAG_START_CHARCODE);
 
             var isComment:Boolean    = false;
@@ -47,7 +47,7 @@ package org.coderepos.xml.sax
 
             while (_buffer.bytesAvailable > 0) {
 
-                var ch:int = _buffer.readByte();
+                var ch:uint = _buffer.readUnsignedByte();
                 i++;
 
                 if (i == 4 && isTag) {
@@ -72,13 +72,13 @@ package org.coderepos.xml.sax
                 }
 
                 if (isTag && ch == XMLUtil.TAG_END_CHARCODE) {
-                    var last1:int;
-                    var last2:int;
+                    var last1:uint;
+                    var last2:uint;
                     if (isComment) {
                         temp = _buffer.position;
                         _buffer.position = temp - 3;
-                        last1 = _buffer.readByte();
-                        last2 = _buffer.readByte();
+                        last1 = _buffer.readUnsignedByte();
+                        last2 = _buffer.readUnsignedByte();
                         _buffer.position = temp;
                         if (   last1 == XMLUtil.HYPHEN_CHARCODE
                             && last2 == XMLUtil.HYPHEN_CHARCODE)
@@ -87,8 +87,8 @@ package org.coderepos.xml.sax
                     else if (isCDATA) {
                         temp = _buffer.position;
                         _buffer.position = temp - 3;
-                        last1 = _buffer.readByte();
-                        last2 = _buffer.readByte();
+                        last1 = _buffer.readUnsignedByte();
+                        last2 = _buffer.readUnsignedByte();
                         _buffer.position = temp;
                         if (   last1 == XMLUtil.RBRA_CHARCODE
                             && last2 == XMLUtil.RBRA_CHARCODE)
