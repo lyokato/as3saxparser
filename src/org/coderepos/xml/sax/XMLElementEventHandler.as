@@ -9,15 +9,17 @@ package org.coderepos.xml.sax
     {
         private var _currentBuffer:XMLElementBuffer;
         private var _currentCallback:Function;
+        private var _callbackForUnknown:Function;
         private var _events:Array;
         private var _rootEvent:Object;
 
         public function XMLElementEventHandler()
         {
-            _currentBuffer   = null;
-            _currentCallback = null;
-            _events          = [];
-            _rootEvent       = {};
+            _currentBuffer      = null;
+            _currentCallback    = null;
+            _events             = [];
+            _rootEvent          = {};
+            _callbackForUnknown = null;
         }
 
         public function registerRootElementAttributeEvent(ns:String, localName:String,
@@ -35,6 +37,11 @@ package org.coderepos.xml.sax
 
             var id:String = XMLUtil.genElementSig(ns, localName);
             _events[depth][id] = callback;
+        }
+
+        public function registerUnknownElementEvent(callback:Function):void
+        {
+            _callbackForUnknown = callback;
         }
 
         // IXMLSAXHandler interface
@@ -79,6 +86,8 @@ package org.coderepos.xml.sax
                 } else if (_currentBuffer.isCapturingDescendant(ns, localName, depth)) {
                     _currentBuffer.finishCapturingDescendant(ns, localName, depth);
                 }
+            } else if (_callbackForUnknown != null) {
+                _callbackForUnknown(ns, localName, depth);
             }
         }
 

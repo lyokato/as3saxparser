@@ -1,0 +1,48 @@
+<!--
+ To build as3saxparser.swc, use
+
+   compc -load-config=build-swc.xml
+   acompc -load-config=build-swc.xml
+
+ That is all.
+-->
+<flex-config>
+  <target-player>10.0.0</target-player>
+  <compiler>
+    <external-library-path>
+      <path-element>${flexlib}/libs/player/10/playerglobal.swc</path-element>
+      <path-element>lib/corelib-20070830.swc</path-element>
+    </external-library-path>
+    
+    <source-path>
+      <path-element>src</path-element>
+    </source-path>
+  </compiler>
+  <include-classes>
+      <class>org.coderepos.xml.XMLAttribute</class>
+      <class>org.coderepos.xml.XMLAttributes</class>
+      <class>org.coderepos.xml.XMLElement</class>
+      <class>org.coderepos.xml.XMLElementBuffer</class>
+      <class>org.coderepos.xml.XMLElementNS</class>
+      <class>org.coderepos.xml.XMLUtil</class>
+      <class>org.coderepos.xml.exceptions.XMLElementDepthOverError</class>
+      <class>org.coderepos.xml.exceptions.XMLFragmentSizeOverError</class>
+      <class>org.coderepos.xml.exceptions.XMLSyntaxError</class>
+      <class>org.coderepos.xml.sax.IXMLSAXHandler</class>
+      <class>org.coderepos.xml.sax.XMLElementEventHandler</class>
+      <class>org.coderepos.xml.sax.XMLFragmentSplitter</class>
+      <class>org.coderepos.xml.sax.XMLSAXDefaultHandler</class>
+      <class>org.coderepos.xml.sax.XMLSAXInternalParser</class>
+      <class>org.coderepos.xml.sax.XMLSAXInternalParserContext</class>
+      <class>org.coderepos.xml.sax.XMLSAXParser</class>
+      <class>org.coderepos.xml.sax.XMLSAXParserConfig</class>
+  </include-classes>
+  <metadata>
+    <creator>Lyo Kato</creator>
+    <description>http://github.com/lyokato/as3saxparser.git</description>
+    <language>EN</language>
+    <title>AS3 SAX Parser Library</title>
+  </metadata>
+  <output>bin/as3saxparser-1_0_1.swc</output>
+</flex-config>
+
