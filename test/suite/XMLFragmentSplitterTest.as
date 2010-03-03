@@ -21,7 +21,27 @@ package suite
             ts.addTest( new XMLFragmentSplitterTest("testSplit") );
             ts.addTest( new XMLFragmentSplitterTest("testSplitWithCommentAndCDATA") );
             ts.addTest( new XMLFragmentSplitterTest("testDiscard") );
+            ts.addTest( new XMLFragmentSplitterTest("testJID") );
             return ts;
+        }
+
+        public function testJID():void
+        {
+            var config:XMLSAXParserConfig = new XMLSAXParserConfig();
+            config.MAX_FRAGMENT_SIZE = 1024 * 100;
+
+            var splitter:XMLFragmentSplitter = new XMLFragmentSplitter(config);
+
+            var bytes:ByteArray = new ByteArray();
+            bytes.writeUTFBytes('<item jid="lyokato@gmail.com" subscription="both" name="');
+            splitter.pushBytes(bytes);
+            var bytes2:ByteArray = new ByteArray();
+            bytes2.writeUTFBytes('Lyo Kato (lyokato)"><group>メンバー</group></item>');
+            splitter.pushBytes(bytes2);
+
+            var res1:String = splitter.splitFragment();
+            assertEquals('first fragment', res1, '<item jid="lyokato@gmail.com" subscription="both" name="Lyo Kato (lyokato)">');
+
         }
 
         public function testSplit():void

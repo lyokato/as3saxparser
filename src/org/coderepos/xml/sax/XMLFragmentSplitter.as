@@ -25,6 +25,8 @@ package org.coderepos.xml.sax
         public function pushBytes(b:ByteArray):void
         {
             var pos:int = _buffer.position;
+            _buffer.position = _buffer.length;
+            b.position = 0;
             _buffer.writeBytes(b, 0, b.length);
             _buffer.position = pos;
         }

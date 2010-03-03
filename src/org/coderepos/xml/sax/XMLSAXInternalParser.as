@@ -285,7 +285,7 @@ package org.coderepos.xml.sax
                 localName = qname.substring(i + 1);
             }
 
-            var lastElem:Array   = _elementStack.pop();
+            var lastElem:Array = _elementStack.pop();
             if (!(prefix == lastElem[0] && localName == lastElem[1]))
                 throw new XMLSyntaxError("Unmatched closing tag: " + ctx.chunk);
 
