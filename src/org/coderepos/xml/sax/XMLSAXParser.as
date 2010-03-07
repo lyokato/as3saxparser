@@ -28,6 +28,8 @@ package org.coderepos.xml.sax
             _splitter.pushBytes(bytes);
             var fragment:String;
             while ((fragment = _splitter.splitFragment()) != null) {
+                if (fragment.match(/^<\?xml\s.*\?>$/) != null)
+                    reset();
                 _internalParser.parseChunk(fragment);
             }
             _splitter.discardRead();
