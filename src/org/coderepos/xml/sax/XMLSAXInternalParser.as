@@ -342,7 +342,7 @@ package org.coderepos.xml.sax
             if (_elementStack.length == 0)
                 throw new XMLSyntaxError("Invalid tag for CDATA: " + ctx.chunk);
 
-            var res:Array = ctx.chunk.match(/^\<\!\[CDATA\[(.+)\]\]\>$/);
+            var res:Array = ctx.chunk.match(/\A\<\!\[CDATA\[((?:.|\n)+)\]\]\>\z/);
             if (res == null)
                 throw new XMLSyntaxError("Invalid tag for CDATA: " + ctx.chunk);
 
@@ -353,7 +353,7 @@ package org.coderepos.xml.sax
 
         private function parseComment(ctx:XMLSAXInternalParserContext):void
         {
-            var res:Array = ctx.chunk.match(/^\<\!\-\-(.+)\-\-\>$/);
+            var res:Array = ctx.chunk.match(/^\<\!\-\-((?:.|\n)+)\-\-\>\z/);
             if (res == null)
                 throw new XMLSyntaxError("Invalid tag for comment: " + ctx.chunk);
 
