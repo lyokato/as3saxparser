@@ -80,7 +80,7 @@ package org.coderepos.xml.sax
             } else {
                 if (!(_completedDecl && _elementStack.length > 0))
                     throw new XMLSyntaxError(
-                        "Text shuld be after decl and under some element: " + chunk);
+                        "First text shuld be after decl and under some element: " + chunk);
                 parseContent(ctx);
             }
         }

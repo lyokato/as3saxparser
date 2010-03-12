@@ -42,7 +42,8 @@ package org.coderepos.xml.sax
             while ((fragment = _splitter.splitFragment()) != null) {
                 if (fragment.match(/^<\?xml\s.*\?>$/) != null)
                     reset();
-                _internalParser.parseChunk(fragment);
+                if (fragment.match(/^[ \f\t\r\n\v]*\z/) == null)
+                    _internalParser.parseChunk(fragment);
             }
             _splitter.discardRead();
         }

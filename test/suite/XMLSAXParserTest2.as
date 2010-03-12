@@ -28,7 +28,7 @@ package suite
         public function testParse():void
         {
 
-            var xmlString:String = "<foo xmlns='http://example.org/' xmlns:bar='http://example.org/bar' hoge='buz'>data<bar:child>data2</bar:child>";
+            var xmlString:String = " <foo xmlns='http://example.org/' xmlns:bar='http://example.org/bar' hoge='buz'>data<bar:child>data2</bar:child>";
             var bytes:ByteArray = new ByteArray();
             bytes.writeUTFBytes(xmlString);
 
