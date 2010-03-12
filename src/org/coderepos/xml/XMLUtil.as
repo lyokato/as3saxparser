@@ -35,7 +35,7 @@ package org.coderepos.xml
 
         public static function isSpace(char:String):Boolean
         {
-            return (char.match(/^\s$/) != null);
+            return (char.match(/^[ \f\t\r\n\v]\z/) != null);
         }
 
         public static function genElementSig(ns:String, localName:String):String

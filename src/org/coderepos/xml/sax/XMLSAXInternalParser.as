@@ -147,7 +147,7 @@ package org.coderepos.xml.sax
                 ctx.next();
                 xSpaceOpt(ctx);
             } else {
-                throw new XMLSyntaxError("whitespace expected.");
+                throw new XMLSyntaxError("whitespace expected: " + ctx.chunk);
             }
         }
 
@@ -218,8 +218,12 @@ package org.coderepos.xml.sax
                 }
 
                 ch = ctx.get();
-                if ((ch != '>') && (ch != '/') && (ch != '?'))
-                    xSpace(ctx);
+                if ((ch != '>') && (ch != '/') && (ch != '?')) {
+                    if (XMLUtil.isSpace(ch)) {
+                        ctx.next();
+                        xSpaceOpt(ctx);
+                    }
+                }
                 ch = ctx.get();
             }
 
