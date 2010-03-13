@@ -18,6 +18,7 @@ package suite
         {
             var ts:TestSuite = new TestSuite();
             ts.addTest( new XMLUtilTest("testEscape") );
+            ts.addTest( new XMLUtilTest("testStrip") );
             return ts;
         }
 
@@ -28,6 +29,16 @@ package suite
             assertEquals(escaped, '&lt;foo&gt; &apos;bar&apos; &quot;buz&quot;');
             var unescaped:String = XMLUtil.unescapeXMLChar(escaped);
             assertEquals(unescaped, "<foo> 'bar' \"buz\"");
+        }
+
+        public function testStrip():void
+        {
+            var origin:String = "<foo>aaa<bbb> bbb</bbb></foo>";
+            assertEquals('strip', XMLUtil.strip(origin), 'aaa bbb');
+            var originBytes:ByteArray = new ByteArray();
+            originBytes.writeUTFBytes(origin);
+            originBytes.position = 0;
+            assertEquals('strip', XMLUtil.stripBytes(originBytes), 'aaa bbb');
         }
     }
 }

@@ -12,6 +12,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package org.coderepos.xml
 {
+    import flash.utils.ByteArray;
+    import org.coderepos.xml.sax.XMLSAXParserConfig;
+    import org.coderepos.xml.sax.XMLFragmentSplitter;
+
     public class XMLUtil
     {
         public static const TAG_START:String = "<";
@@ -94,6 +98,29 @@ package org.coderepos.xml
                 }
                 return unescaped;
             });
+        }
+
+        public static function strip(str:String):String
+        {
+            var bytes:ByteArray = new ByteArray();
+            bytes.writeUTFBytes(str);
+            bytes.position = 0;
+            return stripBytes(bytes);
+        }
+
+        public static function stripBytes(bytes:ByteArray):String
+        {
+            var splitter:XMLFragmentSplitter =
+                new XMLFragmentSplitter(new XMLSAXParserConfig());
+            var result:String = "";
+            splitter.pushBytes(bytes);
+            var fragment:String;
+            while ((fragment = splitter.splitFragment()) != null) {
+                if (   fragment.charAt(0) != '<' 
+                    && fragment.match(/^[ \f\t\r\n\v]*\z/) == null)
+                result += fragment;
+            }
+            return result;
         }
 
     }
