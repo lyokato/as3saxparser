@@ -227,14 +227,21 @@ package org.coderepos.xml.sax
                 ch = ctx.get();
             }
 
+            // if xmlns is not found on root element, set dummy
+            if (_elementStack.length == 0 && xmlns == null)
+                xmlns = XMLUtil.DUMMY_NS;
+
             _currentNS = new XMLElementNS(xmlns, _currentNS);
             for (var pre:String in namespaces)
                 _currentNS.addNamespace(pre, namespaces[pre]);
 
             var attrs:XMLAttributes = new XMLAttributes(_currentNS);
-            for each(var a:Array in attributes)
-                attrs.addAttribute(a[0], a[1], a[2]);
-
+            try {
+                for each(var a:Array in attributes)
+                    attrs.addAttribute(a[0], a[1], a[2]);
+            } catch (e:*) {
+                throw new XMLSyntaxError("Invalid attributes: " + ctx.chunk);
+            }
             return attrs;
         }
 
@@ -264,6 +271,9 @@ package org.coderepos.xml.sax
 
             if (_elementStack.length >= _MAX_ELEMENT_DEPTH)
                 throw new XMLElementDepthOverError("The Depth is over " + _MAX_ELEMENT_DEPTH);
+
+            if (uri == XMLUtil.DUMMY_NS)
+                uri = null;
 
             if (ch == "/") {
                 xToken(ctx, "/>");
@@ -303,9 +313,13 @@ package org.coderepos.xml.sax
 
             var lastElem:Array = _elementStack.pop();
             if (!(prefix == lastElem[0] && localName == lastElem[1]))
-                throw new XMLSyntaxError("Unmatched closing tag: " + ctx.chunk);
+                throw new XMLSyntaxError("Unmatched closing tag: " + ctx.chunk
+                    + " should be </" + lastElem[1] + ">");
 
             var uri:String = _currentNS.getURIForPrefix(prefix);
+            if (uri == XMLUtil.DUMMY_NS)
+                uri = null;
+
             getHandler().endElement(uri, localName, _elementStack.length);
 
             if (_elementStack.length == 0) {

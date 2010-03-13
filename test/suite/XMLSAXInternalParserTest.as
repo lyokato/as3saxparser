@@ -35,7 +35,7 @@ package suite
             parser.parseChunk("data");
             parser.parseChunk("<![CDATA[ hoge > ]]>");
             parser.parseChunk("<!-- foobarbuz -->");
-            parser.parseChunk("<br />");
+            parser.parseChunk("<br hoge='test'/>");
             parser.parseChunk("</foo>");
         }
 

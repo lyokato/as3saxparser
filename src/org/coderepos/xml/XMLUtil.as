@@ -22,6 +22,7 @@ package org.coderepos.xml
         public static const RBRA_CHARCODE:int = RBRA.charCodeAt(0);
         public static const HYPHEN:String = "-";
         public static const HYPHEN_CHARCODE:int = HYPHEN.charCodeAt(0);
+        public static const DUMMY_NS:String = "http://coderepos.org/ns/dummy";
 
         public static function isNameStart(char:String):Boolean
         {
