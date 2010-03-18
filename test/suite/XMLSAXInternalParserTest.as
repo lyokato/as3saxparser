@@ -28,6 +28,7 @@ package suite
 
         public function testParser():void
         {
+            _state = "";
             var config:XMLSAXParserConfig = new XMLSAXParserConfig();
             var parser:XMLSAXInternalParser = new XMLSAXInternalParser(config);
             parser.handler = this;
@@ -37,6 +38,19 @@ package suite
             parser.parseChunk("<!-- foobarbuz -->");
             parser.parseChunk("<br hoge='test'/>");
             parser.parseChunk("</foo>");
+            assertEquals("state check", "startDocument:element[null:foo:0]:CHARS[data]:CDATA[hoge >]:COMMENT[foobarbuz]:element[null:br:1]:endElement[null:br:1]:endElement[null:foo:0]:endDocument:", _state);
+        }
+
+        public function testParser2():void
+        {
+            _state = "";
+            var config:XMLSAXParserConfig = new XMLSAXParserConfig();
+            var parser:XMLSAXInternalParser = new XMLSAXInternalParser(config);
+            parser.handler = this;
+            parser.parseChunk('<stream xmlns="jabber:client">');
+            parser.parseChunk('<identity category="client" name="as3xmppclient" type="pc" xml:lang="en-US"/>');
+            parser.parseChunk('</stream>');
+            assertEquals('', _state);
         }
 
         public function startDocument():void {
@@ -45,7 +59,6 @@ package suite
 
         public function endDocument():void {
             _state += "endDocument:";
-            assertEquals("state check", "startDocument:element[null:foo:0]:CHARS[data]:CDATA[hoge >]:COMMENT[foobarbuz]:element[null:br:1]:endElement[null:br:1]:endElement[null:foo:0]:endDocument:", _state);
         }
         public function startElement(ns:String, name:String, attr:XMLAttributes, depth:uint):void {
             _state += "element[" + ns + ":" + name + ":" + String(depth) + "]:";

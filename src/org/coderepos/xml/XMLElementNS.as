@@ -59,6 +59,22 @@ package org.coderepos.xml
                 return _parent.getURIForPrefix(prefix);
             }
         }
+
+        public function toString():String
+        {
+            var str:String = "-----------------------\n[NS-URI]";
+            if (_uri == null)
+                str += " NULL\n"
+            else
+                str += _uri + "\n";
+            for (var prop:String in _dict)
+                str += "[NS:" + prop +  "] " + _dict[prop] + "\n";
+
+            if (_parent != null)
+                str += _parent.toString();
+
+            return str;
+        }
     }
 }
 

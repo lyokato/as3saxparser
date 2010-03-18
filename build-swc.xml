@@ -43,6 +43,6 @@
     <language>EN</language>
     <title>AS3 SAX Parser Library</title>
   </metadata>
-  <output>bin/as3saxparser-1_0_6.swc</output>
+  <output>bin/as3saxparser-1_0_7.swc</output>
 </flex-config>
 

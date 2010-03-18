@@ -79,6 +79,21 @@ package org.coderepos.xml
             }
             return results;
         }
+
+        public function toString():String
+        {
+            var str:String = "========================\n";
+            for (var uri:String in _attrs) {
+                var map:Object = _attrs[uri];
+                for (var name:String in map) {
+                    str += "[ATTR-URI] " + uri + "\n";
+                    str += "[ATTR-NAME]" + name + "\n";
+                    str += "[ATTR-VALUE]" + map[name] + "\n";
+                }
+            }
+            str += _ns.toString();
+            return str;
+        }
     }
 }
 

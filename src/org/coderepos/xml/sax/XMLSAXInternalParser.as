@@ -240,7 +240,8 @@ package org.coderepos.xml.sax
                 for each(var a:Array in attributes)
                     attrs.addAttribute(a[0], a[1], a[2]);
             } catch (e:*) {
-                throw new XMLSyntaxError("Invalid attributes: " + ctx.chunk);
+                throw new XMLSyntaxError("Invalid attributes: " + ctx.chunk
+                    + "\n" + attrs.toString());
             }
             return attrs;
         }
@@ -325,8 +326,9 @@ package org.coderepos.xml.sax
             if (_elementStack.length == 0) {
                 getHandler().endDocument();
                 reset();
+            } else {
+                _currentNS = _currentNS.getParent();
             }
-            _currentNS = _currentNS.getParent();
         }
 
         private function parseContent(ctx:XMLSAXInternalParserContext):void
