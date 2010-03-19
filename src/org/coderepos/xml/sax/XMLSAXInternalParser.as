@@ -279,8 +279,8 @@ package org.coderepos.xml.sax
             if (ch == "/") {
                 xToken(ctx, "/>");
                 getHandler().startElement(uri, localName, attrs, _elementStack.length);
-                getHandler().endElement(uri, localName, _elementStack.length);
                 _currentNS = _currentNS.getParent();
+                getHandler().endElement(uri, localName, _elementStack.length);
             } else {
                 getHandler().startElement(uri, localName, attrs, _elementStack.length);
                 _elementStack.push([prefix, localName]);
@@ -321,13 +321,13 @@ package org.coderepos.xml.sax
             if (uri == XMLUtil.DUMMY_NS)
                 uri = null;
 
+            _currentNS = _currentNS.getParent();
+
             getHandler().endElement(uri, localName, _elementStack.length);
 
             if (_elementStack.length == 0) {
                 getHandler().endDocument();
                 reset();
-            } else {
-                _currentNS = _currentNS.getParent();
             }
         }
 

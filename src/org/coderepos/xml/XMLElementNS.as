@@ -48,10 +48,9 @@ package org.coderepos.xml
 
         public function getURIForPrefix(prefix:String):String
         {
-            if (prefix == null)
+            if (prefix == null) {
                 return getURI();
-
-            else if (prefix in _dict) {
+            } else if (prefix in _dict) {
                 return _dict[prefix];
             } else {
                 if (_parent == null)
